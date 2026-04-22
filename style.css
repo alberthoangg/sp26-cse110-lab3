@@ -388,3 +388,97 @@ button[type="submit"]:active {
     grid-template-columns: 1fr;  /* grid property #5 */
   }
 }
+
+
+/* ===============================================================
+ * Issue #4 — Selector coverage + validation
+ * Each remaining required selector type gets at least one real rule.
+ * Selectors already used earlier:
+ *   Universal  → *, *::before, *::after   (reset)
+ *   Element    → body, h1, hr, section, …
+ *   ID         → #attendance, #media
+ *   Attribute  → button[type="submit"]
+ *   Pseudo     → a:hover, a:active, button[type="submit"]:hover/:active
+ *   List       → h2, h3 ; header, main, footer ; em, i ; strong, b
+ *   Descendant → #attendance li, nav a, section h2, #media section, …
+ * =============================================================== */
+
+
+/* ---------------------------------------------------------------
+ * CLASS selector + COMBINING element + class (p.note)
+ * --------------------------------------------------------------- */
+.note {
+  margin: 0.75rem 0;
+  padding: 0.5em 0.75em;
+  background-color: var(--color-accent-soft);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0.25rem;
+}
+
+p.note {                 /* element + class combined */
+  font-style: italic;
+}
+
+
+/* ---------------------------------------------------------------
+ * CHILD combinator ( parent > child )
+ * Targets elements that are *direct* children only.
+ * --------------------------------------------------------------- */
+header > h1 {            /* only h1 directly inside <header> */
+  margin-top: 0;
+}
+
+fieldset > legend {      /* only legend directly inside fieldset */
+  font-weight: 600;
+}
+
+
+/* ---------------------------------------------------------------
+ * ADJACENT sibling combinator ( prev + next )
+ * Tightens the gap between a section heading and its first paragraph.
+ * --------------------------------------------------------------- */
+h2 + p {
+  margin-top: 0.25rem;
+}
+
+
+/* ---------------------------------------------------------------
+ * GENERAL sibling combinator ( earlier ~ later )
+ * Adds a subtle divider above the nav whenever it follows an h1.
+ * --------------------------------------------------------------- */
+h1 ~ nav {
+  border-top: 1px dashed var(--color-rule);
+  padding-top: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+
+/* ---------------------------------------------------------------
+ * :has()  — newer selector (widely adopted late 2023)
+ * Marks any <section> that contains a <details> element by drawing
+ * a slightly stronger left edge so readers notice collapsibles.
+ * --------------------------------------------------------------- */
+section:has(details) {
+  border-left-width: 3px;
+  border-left-color: var(--color-accent);
+}
+
+
+/* ---------------------------------------------------------------
+ * NESTED selectors — also newer (native CSS nesting, adopted 2023).
+ * Groups footer rules without repeating the parent selector.
+ * --------------------------------------------------------------- */
+footer {
+  & p {
+    margin: 0;
+  }
+
+  & a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
