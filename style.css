@@ -1,16 +1,49 @@
-/*
+/* =============================================================
  * style.css — Meeting minutes
- *
- * Issue #1 scope: CSS setup only.
- * General styling, layout, and selector work live in later issues (#2, #3, #4).
- */
+ * Issues covered so far:
+ *   #1 Setup (font, base reset)
+ *   #2 General styling (colors, units, box model, text,
+ *       display, position, sizing)
+ * Layouts (flex/grid/responsiveness) live in Issue #3.
+ * Full selector coverage (:has(), nesting, combinators) in Issue #4.
+ * ============================================================= */
 
+
+/* ---------------------------------------------------------------
+ * Design tokens
+ * One example of every required color format lives here so the
+ * rest of the stylesheet can read naturally.
+ * --------------------------------------------------------------- */
 :root {
   --font-body: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+
+  /* Neutrals */
+  --color-text: rgb(24, 24, 27);                    /* rgb()      */
+  --color-text-muted: rgba(24, 24, 27, 0.65);       /* rgba()     */
+  --color-bg: #f4f6fa;                              /* hex (short-ish) */
+  --color-surface: #ffffff;                         /* hex        */
+  --color-rule: lightgray;                          /* color name */
+
+  /* Accent + derived surfaces */
+  --color-accent: hsl(212, 80%, 42%);               /* hsl()      */
+  --color-accent-soft: hsla(212, 80%, 42%, 0.12);   /* hsla()     */
+
+  /* Wider-gamut color examples (widely adopted Dec 2023) */
+  --color-hot: color(display-p3 0.95 0.23 0.32);                  /* color() / P3 */
+  --color-accent-mix: color-mix(in srgb, var(--color-accent) 72%, white 28%);
+
+  /* Sizing tokens: mix of relative + absolute units */
+  --content-max: 40pc;   /* absolute unit: pc  (~640px) */
+  --radius: 0.5rem;      /* relative unit: rem         */
 }
 
+
+/* ---------------------------------------------------------------
+ * Reset + global base
+ * --------------------------------------------------------------- */
 html {
   box-sizing: border-box;
+  position: static; /* position value #1 (explicit default) */
 }
 
 *,
@@ -21,7 +54,189 @@ html {
 
 body {
   margin: 0;
-  font-family: var(--font-body);
+
+  /* CSS variable WITH fallback chain */
+  font-family: var(--font-body, Georgia, "Times New Roman", serif);
   line-height: 1.5;
+
+  color: var(--color-text);
+  background-color: var(--color-bg);
   -webkit-font-smoothing: antialiased;
+
+  min-width: 320px;   /* absolute unit: px */
+  padding: 16pt;      /* absolute unit: pt (padding shorthand) */
+}
+
+
+/* ---------------------------------------------------------------
+ * Page landmarks — centered without extra wrapper markup.
+ * Demonstrates margin: auto, max-width, width, %, and pc.
+ * --------------------------------------------------------------- */
+header,
+main,
+footer {
+  max-width: var(--content-max);
+  width: 90%;          /* relative unit: % */
+  margin: 0 auto;      /* margin: auto (shorthand) */
+}
+
+main {
+  max-width: 72ch;     /* relative unit: ch — keeps text lines readable */
+}
+
+
+/* ---------------------------------------------------------------
+ * Text defaults
+ * color / text-decoration / text-align
+ * --------------------------------------------------------------- */
+h1 {
+  margin: 0 0 0.5em 0;         /* margin shorthand; em = relative unit */
+  color: var(--color-accent);
+  text-align: left;
+  text-decoration: underline;
+}
+
+h2,
+h3 {
+  color: var(--color-accent-mix);
+  text-align: left;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+em,
+i {
+  color: var(--color-text-muted);
+}
+
+strong,
+b {
+  /* Wider-gamut color shines on P3 displays and falls back on sRGB */
+  color: var(--color-hot);
+}
+
+
+/* ---------------------------------------------------------------
+ * Header card — demonstrates margin/padding LONGHAND + border SHORTHAND
+ * --------------------------------------------------------------- */
+header {
+  background-color: var(--color-surface);
+
+  /* margin longhand (all four sides) */
+  margin-top: 1rem;
+  margin-right: auto;     /* margin auto on a side */
+  margin-bottom: 1.5rem;
+  margin-left: auto;
+
+  /* padding longhand (all four sides) */
+  padding-top: 1.25rem;
+  padding-right: 1.25rem;
+  padding-bottom: 1.25rem;
+  padding-left: 1.25rem;
+
+  /* border shorthand + radius */
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius);
+}
+
+
+/* ---------------------------------------------------------------
+ * Section cards — demonstrates margin/padding SHORTHAND + border LONGHAND
+ * --------------------------------------------------------------- */
+section {
+  position: relative; /* position value #2 */
+
+  background-color: var(--color-surface);
+
+  margin: 1rem 0;          /* margin shorthand  */
+  padding: 1rem 1.25rem;   /* padding shorthand */
+
+  /* border longhand */
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-rule);
+  border-radius: var(--radius);
+}
+
+section h2 {
+  position: sticky;         /* position value #3 */
+  top: 0;
+  margin-top: 0;
+  padding: 0.25em 0;
+  background-color: var(--color-surface);
+  max-width: 60ch;
+}
+
+
+/* ---------------------------------------------------------------
+ * Horizontal rule — demonstrates display:block, explicit height/width
+ * --------------------------------------------------------------- */
+hr {
+  display: block;           /* display value #1 */
+  height: 2px;
+  width: 100%;
+  border: 0;
+  background-color: var(--color-accent-soft);
+  margin: 1.5rem auto;      /* margin: auto again on a reset element */
+}
+
+
+/* ---------------------------------------------------------------
+ * Attendance chips — demonstrates display:inline-block
+ * --------------------------------------------------------------- */
+#attendance ul {
+  padding: 0;
+  list-style: none;
+}
+
+#attendance li {
+  display: inline-block;    /* display value #2 */
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent);
+  padding: 0.25em 0.75em;
+  margin: 0.25em 0.25em 0.25em 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
+}
+
+
+/* ---------------------------------------------------------------
+ * Form polish (light touch; real layout lives in Issue #3)
+ * --------------------------------------------------------------- */
+fieldset {
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius);
+  padding: 1em;
+}
+
+legend {
+  padding: 0 0.5em;
+  color: var(--color-accent);
+}
+
+button[type="submit"] {
+  background-color: var(--color-accent);
+  color: white;
+  padding: 0.5em 1em;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+
+
+/* ---------------------------------------------------------------
+ * Footer — small centered closer
+ * --------------------------------------------------------------- */
+footer {
+  margin-top: 2rem;
+  padding: 1rem;
+  text-align: center;       /* second text-align value */
+  color: var(--color-text-muted);
 }
