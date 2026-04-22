@@ -1,0 +1,27 @@
+/*
+ * style.css — Meeting minutes
+ *
+ * Issue #1 scope: CSS setup only.
+ * General styling, layout, and selector work live in later issues (#2, #3, #4).
+ */
+
+:root {
+  --font-body: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
